@@ -73,14 +73,23 @@ router.patch("/:id/addresses/create", async (req, res) => {
   }
 });
 
-router.patch("/:id/addresses/:idx/edit", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    return res.status(200).send({ succus: user });
+router.patch("/:id/addresses/:ida/edit", async (req, res) => {
+  //www.mongodb.com/docs/manual/reference/operator/update/positional/
+  https: try {
+    const adress = await User.updateOne({ _id: req.params.id, "addresses._id": req.params.ida }, { $set: { "addresses.$": req.body } });
+
+    return res.status(201).send({ data: user.addresses, message: "success" });
+
+    return res.status(404).send({ data: adress, message: "error", error: "something went wrong" });
   } catch (error) {
-    console.log("error:", error);
     res.status(500).send({ error: error.message });
   }
 });
 
 module.exports = router;
+
+//  if (adress.acknowledged === true) {
+//    const user = await User.findById(req.params.id).lean().exec();
+
+//    return res.status(201).send({ data: user.addresses, message: "success" });
+//  }
