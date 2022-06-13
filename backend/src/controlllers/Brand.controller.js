@@ -2,6 +2,16 @@ const express = require("express");
 const Brand = require("../models/brand.model");
 const router = express.Router();
 
+
+router.post("/create", async (req, res) => {
+  try {
+    let brand = await Brand.create(req.body)
+    res.status(201).send({ brand, message: "success" });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     let brands = await Brand.find().lean().exec();
@@ -11,14 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/create", async (req, res) => {
-  try {
-    let brand = await Brand.create(req.body).lean().exec();
-    res.status(201).send({ brand, message: "success" });
-  } catch (error) {
-    res.status(500).send({ error: error.message });
-  }
-});
+
 
 router.get("/:id", async (req, res) => {
   try {
